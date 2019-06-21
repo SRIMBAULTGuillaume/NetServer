@@ -3,9 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.645
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetServer", "NetServer\NetServer.csproj", "{9416912F-5A75-4482-B574-4B6612F3551C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculationEngine", "C:\Users\Guillaume\source\repos\CalculationEngine\CalculationEngine\CalculationEngine.csproj", "{5ABE3A39-1983-40BD-855D-9EC74C3ACB11}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculationEngine", "CalculationEngine\CalculationEngine.csproj", "{5ABE3A39-1983-40BD-855D-9EC74C3ACB11}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,10 +11,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9416912F-5A75-4482-B574-4B6612F3551C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9416912F-5A75-4482-B574-4B6612F3551C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9416912F-5A75-4482-B574-4B6612F3551C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9416912F-5A75-4482-B574-4B6612F3551C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5ABE3A39-1983-40BD-855D-9EC74C3ACB11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5ABE3A39-1983-40BD-855D-9EC74C3ACB11}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5ABE3A39-1983-40BD-855D-9EC74C3ACB11}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -26,6 +20,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {1DAC5E95-7C9C-42B2-AD86-E39C8A073121}
+		SolutionGuid = {7FBAA554-6E50-4FB3-A109-32DCDDAC4AD9}
 	EndGlobalSection
 EndGlobal
