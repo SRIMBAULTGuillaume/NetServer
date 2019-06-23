@@ -7,19 +7,30 @@ using Tutorial.SqlConn;
 using System.Data.SqlClient;
 using System.Data.Common;
 using System.Collections;
+using DBUtilisation;
 
 namespace CalcEngConsole
 {
     class Program
     {
+
+      
+
         static void Main(string[] args)
-        {  
-            Console.WriteLine("Se connecte a la Bdd");
-            SreenDevices();
-            Console.Read();    
+        {
+            DAO per = new DAO();    //Instaciation
+                                    //TODO faire la boucle au propre
+                                    //TODO se declanche tous les 15 min et lance la compilation des données
+            //OK SreenDevices();
+            //OK per.InsertPersons("guigui42");    
+            //OKper.SelectAllDevices();
+            Console.WriteLine("j'ai fini");
+            Console.ReadLine();
+
         }
 
         
+
 
         public static void PrintValues(List<Metric> myList)
         {
@@ -40,34 +51,31 @@ namespace CalcEngConsole
 
             }
 
-
-
-
-
         }
 
-      public static void SreenDevices()
-        {
-            var MyDevices = new List<Metric>();
-            MyDevices.Add(new Metric(42, DateTime.Now, 20));
-            MyDevices.Add(new Metric(42, DateTime.Now, 18));
-            MyDevices.Add(new Metric(47, DateTime.Now, 18));
-
-            var rand = new Random();
-            for (int i = 0; i<100; i++)
+          public static void SreenDevices()
             {
-                var a = rand.Next(50);
-                MyDevices.Add(new Metric(48, DateTime.Now, a));
-            }
+                //TODO passer une liste rempli de devices
+                var MyDevices = new List<Metric>();
+                MyDevices.Add(new Metric(42, DateTime.Now, 20));
+                MyDevices.Add(new Metric(42, DateTime.Now, 18));
+                MyDevices.Add(new Metric(47, DateTime.Now, 18));
+
+                var rand = new Random();
+                for (int i = 0; i<100; i++)
+                {
+                    var a = rand.Next(50);
+                    MyDevices.Add(new Metric(48, DateTime.Now, a));
+                }
 
 
-            // Displays the properties and values of the ArrayList.
-            Console.WriteLine("My devices");
-            //Console.WriteLine("    Numbers of Devices:    {0}", MyDevices.Count);
-            //Console.WriteLine("    Total Devices: {0}", MyDevices.Capacity);
+                // Displays the properties and values of the ArrayList.
+                Console.WriteLine("My devices");
+                //Console.WriteLine("    Numbers of Devices:    {0}", MyDevices.Count);
+                //Console.WriteLine("    Total Devices: {0}", MyDevices.Capacity);
             
-            PrintValues(MyDevices);
-        }
+                PrintValues(MyDevices);
+            }
 
 
         static MetricMoy CalcMoyenne(List<Metric> list)

@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetServer", "NetServer\NetS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculationEngine", "C:\Users\Guillaume\source\repos\CalculationEngine\CalculationEngine\CalculationEngine.csproj", "{5ABE3A39-1983-40BD-855D-9EC74C3ACB11}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalcEngConsole", "C:\Users\Guillaume\source\repos\CalculationEngine\CalcEngConsole\CalcEngConsole.csproj", "{0EC93505-AA7B-4113-8567-426B5500A2C7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalcEngConsole", "CalcEngConsole\CalcEngConsole.csproj", "{0EC93505-AA7B-4113-8567-426B5500A2C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
