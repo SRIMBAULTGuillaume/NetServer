@@ -37,18 +37,21 @@ namespace DBUtilisation
             MyCnx.Close();
         }
 
-        public void SelectAllDevices()
+        public void SelectAllMetrics()
         {
             MyCnx = new NpgsqlConnection(BDDJEE);
             MyCnx.Open();
-            string select = "SELECT * FROM \"devices\"";
+            string select = "SELECT * FROM \"metrics\"";
             MyCmd = new NpgsqlCommand(select, MyCnx);
             var reader = MyCmd.ExecuteReader();
             if (reader.HasRows)
             {
                 while (reader.Read())
                 {
-                    Console.WriteLine("{0}\t{1}", reader.GetInt32(0), reader.GetString(1));
+                    //Console.WriteLine("{0}\t{1}", reader.GetInt32(0), reader.GetString(1));
+                    string s = String.Format("{0}\t{1}\t{2}", reader.GetInt32(0), reader.GetTime(1), reader.GetInt32(2));
+                    //Console.WriteLine("{0}\t{1}\t{2}\t{3}", reader.GetInt32(0), reader.GetString(1), reader.GetString(3), reader.GetString(4));
+                    Console.WriteLine(s);
                 }
             }
             else

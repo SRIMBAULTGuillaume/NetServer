@@ -15,15 +15,15 @@ namespace CalcEngConsole
             Console.WriteLine("Je démarre");
             DAO Bdd = new DAO();    //Instaciation
                                     //TODO faire la boucle au propre
-                                    //TODO se declanche tous les 15 min et lance la compilation des données
+                                    //TODO extraire les donnée de la liste screendevices
                                     //OK SreenDevices();
                                     //OK Bdd.InsertPersons("guigui42");    
-                                    //OK Bdd.SelectAllDevices();
+                                    
+            Console.WriteLine("La liste des metrics : /n");
+            // Bdd.SelectAllMetrics();
+            SreenMetrics();
 
-            Console.WriteLine("La liste des devices : /n");
-            Bdd.SelectAllDevices();
-
-            Bdd.InsertMoyen(2,"Powerfullaverage",42);
+                                    //OK Bdd.InsertMoyen(3,"temperature",18);
             Console.WriteLine("J'ai fini d'insérer mes calcul");
 
             OnPause();
@@ -31,6 +31,8 @@ namespace CalcEngConsole
             Console.ReadLine();
 
         }
+
+        //TODO regroupe les metric par unité de temps
 
         public static void OnPause()
         {
@@ -77,6 +79,23 @@ namespace CalcEngConsole
                 }
             }
         }
+
+        public static void SreenMetrics()
+        {
+            //TODO passer une liste rempli de devices
+            var MyMetrics = new List<Metric>();
+            
+            for (int i = 0; i < 100; i++)
+            {
+                var a = 50;
+                MyMetrics.Add(new Metric(48, DateTime.Now, a));
+            }
+
+            Console.WriteLine("My Metrics");
+            PrintValues(MyMetrics);
+        }
+
+
 
         static MetricMoy CalcMoyenne(List<Metric> list)
         {
