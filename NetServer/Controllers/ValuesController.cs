@@ -16,7 +16,7 @@ namespace NetServer.Controllers
         }
 
         // GET api/values/5
-        public string Get(int id)
+        public string Get(int id, int id2)
         {
             return "value";
         }
