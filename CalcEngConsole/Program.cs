@@ -20,11 +20,11 @@ namespace CalcEngConsole
                                     //OK Bdd.InsertPersons("guigui42");    
                                     
             Console.WriteLine("La liste des metrics : /n");
-            // Bdd.SelectAllMetrics();
+            Bdd.SelectAllMetrics();
             SreenMetrics();
 
-                                    //OK Bdd.InsertMoyen(3,"temperature",18);
-            Console.WriteLine("J'ai fini d'insérer mes calcul");
+           //OK Bdd.InsertMoyen(3,"temperature",18);
+           // Console.WriteLine("J'ai fini d'insérer mes calcul");
 
             OnPause();
             Console.WriteLine("J'ai fini");

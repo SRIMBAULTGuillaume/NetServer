@@ -49,7 +49,7 @@ namespace DBUtilisation
                 while (reader.Read())
                 {
                     //Console.WriteLine("{0}\t{1}", reader.GetInt32(0), reader.GetString(1));
-                    string s = String.Format("{0}\t{1}\t{2}", reader.GetInt32(0), reader.GetTime(1), reader.GetInt32(2));
+                    string s = String.Format("{0}\t{1}\t{2}\t{3}", reader.GetInt32(0), reader.GetInt32(1), reader.GetTimeStamp(2), reader.GetInt32(3));
                     //Console.WriteLine("{0}\t{1}\t{2}\t{3}", reader.GetInt32(0), reader.GetString(1), reader.GetString(3), reader.GetString(4));
                     Console.WriteLine(s);
                 }
