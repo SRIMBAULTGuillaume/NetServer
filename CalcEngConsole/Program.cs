@@ -1,13 +1,10 @@
 ﻿using System;
+using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tutorial.SqlConn;
-using System.Data.SqlClient;
-using System.Data.Common;
-using System.Collections;
 using DBUtilisation;
+
+
 
 namespace CalcEngConsole
 {
@@ -15,15 +12,23 @@ namespace CalcEngConsole
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("je démarre");
             DAO per = new DAO();    //Instaciation
                                     //TODO faire la boucle au propre
                                     //TODO se declanche tous les 15 min et lance la compilation des données
-            //OK SreenDevices();
-            //OK per.InsertPersons("guigui42");    
-            //OKper.SelectAllDevices();
+                                    //OK SreenDevices();
+                                    //OK per.InsertPersons("guigui42");    
+                                    //OK per.SelectAllDevices();
+            per.SelectAllDevices();
+            OnPause();
             Console.WriteLine("j'ai fini");
             Console.ReadLine();
 
+        }
+
+        public static void OnPause()
+        {
+           Thread.Sleep(2000);
         }
 
         public static void SreenDevices()
@@ -88,7 +93,7 @@ namespace CalcEngConsole
         }
     }
     // ID device/ date d'insertion / valeur
-    //https://o7planning.org/fr/10515/utilisation-d-une-base-de-donnees-sql-server-en-utilisant-csharp
+    //
 }
 
 
