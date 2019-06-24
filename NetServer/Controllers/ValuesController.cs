@@ -10,17 +10,16 @@ namespace NetServer.Controllers
     public class ValuesController : ApiController
     {
         // GET api/values
-        //public IEnumerable<string> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
-
-        // GET api/values/5
-        public IEnumerable<string> Get(string calc)
+        public IEnumerable<string> Get()
         {
-            return new string[] { "" };
+            return new string[] { "value1", "value2" };
         }
 
+        // GET api/values/5
+        public string Get(int id, int id2)
+        {
+            return "value";
+        }
 
         // POST api/values
         public void Post([FromBody]string value)
