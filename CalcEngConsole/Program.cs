@@ -18,7 +18,8 @@ namespace CalcEngConsole
                                     //TODO se declanche tous les 15 min et lance la compilation des données
                                     //OK SreenDevices();
                                     //OK per.InsertPersons("guigui42");    
-                                    //OKper.SelectAllDevices();
+                                    //OK per.SelectAllDevices();
+            per.SelectAllDevices();
             OnPause();
             Console.WriteLine("j'ai fini");
             Console.ReadLine();

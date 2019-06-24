@@ -6,15 +6,16 @@ namespace DBUtilisation
 {
     public class DAO
     {
-        string Conx = "Server=10.151.129.35;Port=5432;Database=postgres;User Id=admin;Password=admin;";  //exia:10.151.129.35:5432 chez guigui:192.168.1.77
+        string BDDJEE = "Server=10.151.129.35;Port=5432;Database=postgres;User Id=admin;Password=admin;"; //exia:10.151.129.35:5432 chez guigui:192.168.1.77
+        string BDDWindowsServer = "Server=10.151.129.35;Port=5432;Database=calc;User Id=admin;Password=admin;"; // les identifiant de connexions a la base windows server
         NpgsqlCommand MyCmd = null;
         NpgsqlConnection MyCnx = null;
 
-        public void InsertPersons(string name)
+        public void InsertDevices(string name)
         {
-            MyCnx = new NpgsqlConnection(Conx);
+            MyCnx = new NpgsqlConnection(BDDJEE);
             //La valeur DEFAULT parce que la propriété id est auto incrémenté "INSERT INTO \"Test\"(id,name) values(DEFAULT,:name)"
-            string insert = "INSERT INTO \"Test\"(id,name) values(DEFAULT,:name)";   
+            string insert = "INSERT INTO \"devices\"(id,name) values(DEFAULT,:name)";   
             MyCnx.Open();
             MyCmd = new NpgsqlCommand(insert, MyCnx);
             MyCmd.Parameters.Add(new NpgsqlParameter("@name", NpgsqlDbType.Varchar)).Value = @name;
@@ -22,11 +23,22 @@ namespace DBUtilisation
             MyCnx.Close();
         }
 
+        public void InsertMoyenn(int id_device,string type,int value)
+        {
+            MyCnx = new NpgsqlConnection(BDDWindowsServer);
+            string insert = "INSERT INTO \"average\"(id,id_device,type,value) values(DEFAULT,:id_device,:type,:value)";
+            MyCnx.Open();
+            MyCmd = new NpgsqlCommand(insert, MyCnx);
+            MyCmd.Parameters.Add(new NpgsqlParameter("id_device,type,moy", NpgsqlDbType.Varchar)).Value = id_device, type, moy;
+            MyCmd.ExecuteNonQuery(); //Exécution
+            MyCnx.Close();
+        }
+
         public void SelectAllDevices()
         {
-            MyCnx = new NpgsqlConnection(Conx);
+            MyCnx = new NpgsqlConnection(BDDJEE);
             MyCnx.Open();
-            string select = "SELECT * FROM \"Test\"";
+            string select = "SELECT * FROM \"devices\"";
             MyCmd = new NpgsqlCommand(select, MyCnx);
             var reader = MyCmd.ExecuteReader();
             if (reader.HasRows)
@@ -43,6 +55,6 @@ namespace DBUtilisation
             reader.Close();
             MyCnx.Close();
         }
-    }
+     }
 }//Fin
 
