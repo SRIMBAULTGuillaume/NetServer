@@ -2,3 +2,6 @@ language: csharp
 solution: NetServer.sln
 mono:
   - latest
+
+before_install:
+  - nuget restore 
