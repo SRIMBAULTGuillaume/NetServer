@@ -9,6 +9,7 @@ using System.Data.Common;
 using System.Collections;
 using DBUtilisation;
 
+
 namespace CalcEngConsole
 {
     class Program
@@ -18,12 +19,18 @@ namespace CalcEngConsole
             DAO per = new DAO();    //Instaciation
                                     //TODO faire la boucle au propre
                                     //TODO se declanche tous les 15 min et lance la compilation des données
-            //OK SreenDevices();
-            //OK per.InsertPersons("guigui42");    
-            //OKper.SelectAllDevices();
+                                    //OK SreenDevices();
+                                    //OK per.InsertPersons("guigui42");    
+                                    //OKper.SelectAllDevices();
+            OnPause();
             Console.WriteLine("j'ai fini");
             Console.ReadLine();
 
+        }
+
+        public static void OnPause()
+        {
+            
         }
 
         public static void SreenDevices()
