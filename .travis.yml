@@ -1,0 +1,4 @@
+language: csharp
+solution: NetServer.sln
+mono:
+  - latest
