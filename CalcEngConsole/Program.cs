@@ -12,23 +12,29 @@ namespace CalcEngConsole
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("je démarre");
-            DAO per = new DAO();    //Instaciation
+            Console.WriteLine("Je démarre");
+            DAO Bdd = new DAO();    //Instaciation
                                     //TODO faire la boucle au propre
                                     //TODO se declanche tous les 15 min et lance la compilation des données
                                     //OK SreenDevices();
-                                    //OK per.InsertPersons("guigui42");    
-                                    //OK per.SelectAllDevices();
-            per.SelectAllDevices();
+                                    //OK Bdd.InsertPersons("guigui42");    
+                                    //OK Bdd.SelectAllDevices();
+
+            Console.WriteLine("La liste des devices : /n");
+            Bdd.SelectAllDevices();
+
+            Bdd.InsertMoyen(2,"Powerfullaverage",42);
+            Console.WriteLine("J'ai fini d'insérer mes calcul");
+
             OnPause();
-            Console.WriteLine("j'ai fini");
+            Console.WriteLine("J'ai fini");
             Console.ReadLine();
 
         }
 
         public static void OnPause()
         {
-           Thread.Sleep(2000);
+           Thread.Sleep(1000);
         }
 
         public static void SreenDevices()
