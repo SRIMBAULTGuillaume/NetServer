@@ -23,16 +23,16 @@ namespace DBUtilisation
             MyCnx.Close();
         }
 
-        public void InsertMoyen(int id_device,string type,int value)
+        public void InsertMoyen(int id_device,string type,int value, NpgsqlTimeStamp date)
         {
             MyCnx = new NpgsqlConnection(BDDWindowsServer);
-            string insert = "INSERT INTO \"average\"(id,id_device,type,value) values(DEFAULT,:id_device,:type,:value)";
+            string insert = "INSERT INTO \"average\"(id,id_device,type,value,date) values(DEFAULT,:id_device,:type,:value,:date)";
             MyCnx.Open();
             MyCmd = new NpgsqlCommand(insert, MyCnx);
             MyCmd.Parameters.Add(new NpgsqlParameter("id_device", NpgsqlDbType.Integer)).Value = id_device;
             MyCmd.Parameters.Add(new NpgsqlParameter("type", NpgsqlDbType.Varchar)).Value = type;
             MyCmd.Parameters.Add(new NpgsqlParameter("value", NpgsqlDbType.Integer)).Value = value;
-
+            MyCmd.Parameters.Add(new NpgsqlParameter("date", NpgsqlDbType.Timestamp)).Value = date;
             MyCmd.ExecuteNonQuery(); //Exécution
             MyCnx.Close();
         }
