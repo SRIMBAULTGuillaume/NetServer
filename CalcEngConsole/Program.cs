@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
 using DBUtilisation;
+
 
 
 namespace CalcEngConsole
@@ -10,6 +12,7 @@ namespace CalcEngConsole
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("je démarre");
             DAO per = new DAO();    //Instaciation
                                     //TODO faire la boucle au propre
                                     //TODO se declanche tous les 15 min et lance la compilation des données
@@ -24,7 +27,7 @@ namespace CalcEngConsole
 
         public static void OnPause()
         {
-            
+           Thread.Sleep(2000);
         }
 
         public static void SreenDevices()
