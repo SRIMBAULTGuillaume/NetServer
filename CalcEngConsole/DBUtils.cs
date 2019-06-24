@@ -29,7 +29,10 @@ namespace DBUtilisation
             string insert = "INSERT INTO \"average\"(id,id_device,type,value) values(DEFAULT,:id_device,:type,:value)";
             MyCnx.Open();
             MyCmd = new NpgsqlCommand(insert, MyCnx);
-            MyCmd.Parameters.Add(new NpgsqlParameter("id_device,type,moy", NpgsqlDbType.Varchar)).Value = id_device, type, moy;
+            MyCmd.Parameters.Add(new NpgsqlParameter("id_device", NpgsqlDbType.Varchar)).Value = id_device;
+            MyCmd.Parameters.Add(new NpgsqlParameter("type", NpgsqlDbType.Varchar)).Value = type;
+            MyCmd.Parameters.Add(new NpgsqlParameter("value", NpgsqlDbType.Varchar)).Value = value;
+
             MyCmd.ExecuteNonQuery(); //Exécution
             MyCnx.Close();
         }

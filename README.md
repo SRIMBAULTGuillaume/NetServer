@@ -5,7 +5,8 @@
 
 Récupère les données depuis la base de donnée Java, les compiles/calcule /reformate puis les stock dans la bdd du Windows Server
 
-[![Build Status](https://travis-ci.org/SRIMBAULTGuillaume/NetServer.svg?branch=master)](https://travis-ci.org/SRIMBAULTGuillaume/NetServer.svg?branch=master)
+branch dev
+[![Build Status](https://travis-ci.org/SRIMBAULTGuillaume/NetServer.svg?branch=origin%2Fdev)](https://travis-ci.org/SRIMBAULTGuillaume/NetServer.svg?branch=origin%2Fdev)
 
 
 https://jormes.developpez.com/articles/services-windows-dotnet/  
