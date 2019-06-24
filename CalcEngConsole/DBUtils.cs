@@ -6,7 +6,7 @@ namespace DBUtilisation
 {
     public class DAO
     {
-        string Conx = "Server=192.168.1.77;Port=5432;Database=postgres;User Id=admin;Password=admin;";
+        string Conx = "Server=10.151.129.35;Port=5432;Database=postgres;User Id=admin;Password=admin;";  //exia:10.151.129.35:5432 chez guigui:192.168.1.77
         NpgsqlCommand MyCmd = null;
         NpgsqlConnection MyCnx = null;
 
