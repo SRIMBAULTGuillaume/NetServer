@@ -3,11 +3,8 @@ solution: NetServer.sln
 mono:
   - latest
 
-#install:
-#  - cd NetServer
-#  - curl -L -o nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
-#  - ls
-#  - mono nuget.exe restore NetServer.sln -Verbosity Detailed -NonInteractive -ConfigFile nuget.config
+install:
+  - cat Packages/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0/build/net45/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props
   
 notifications:
   email: false
