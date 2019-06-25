@@ -30,7 +30,7 @@ namespace NetServer.Models
                 while (reader.Read())
                 {
                     Measure measure = new Measure();
-                    measure.value = reader.GetInt32(0);
+                    measure.value = reader.GetDouble(0);
                     measure.date = reader.GetDateTime(1);
                     list.Add(measure);
                 }
@@ -57,7 +57,7 @@ namespace NetServer.Models
                 {
                     count++;
                     Measure measure = new Measure();
-                    measure.value = reader.GetInt32(0);
+                    measure.value = reader.GetDouble(0);
                     measure.date = reader.GetDateTime(1);
                     if (count == frequence)
                     {
