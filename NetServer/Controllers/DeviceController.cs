@@ -21,11 +21,11 @@ namespace NetServer.Controllers
         }
 
         // GET api/<controller>/5
-        public HttpResponseMessage Get(string device, int size)
+        public HttpResponseMessage Get(string metric, string device, int size)
         {
             ResultAdapter resultAdapter = new ResultAdapter();
             resultAdapter.device = device;
-            resultAdapter.generateTable(size);
+            resultAdapter.generateTable(metric, size);
 
             var json = JsonConvert.SerializeObject(resultAdapter);
             var response = this.Request.CreateResponse(HttpStatusCode.OK);
@@ -33,11 +33,11 @@ namespace NetServer.Controllers
             return response;
         }
 
-        public HttpResponseMessage Get(string device, int size, int frequence)
+        public HttpResponseMessage Get(string metric, string device, int size, int frequence)
         {
             ResultAdapter resultAdapter = new ResultAdapter();
             resultAdapter.device = device;
-            resultAdapter.generateTable(size, frequence);
+            resultAdapter.generateTable(metric, size, frequence);
 
             var json = JsonConvert.SerializeObject(resultAdapter);
             var response = this.Request.CreateResponse(HttpStatusCode.OK);
