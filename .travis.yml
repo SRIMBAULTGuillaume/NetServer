@@ -4,12 +4,9 @@ mono:
   - latest
 
 before_install:
+  - curl -L -o nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
   - ls
-  - ls Packages
-  - ls Packages/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0
-  - ls Packages/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0/build
-  - ls Packages/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0/build/net45/
-  - cat Packages/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0/build/net45/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props
+  - mono nuget.exe restore .
   
 notifications:
   email: false
