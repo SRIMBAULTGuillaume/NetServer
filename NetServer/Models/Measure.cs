@@ -15,14 +15,13 @@ namespace NetServer.Models
         public void generateTable(int size)  
         {
             valueList = new ArrayList();
-            valueList = dao.RetreiveValues(device, size);
-            /*for (int i = 0; i < size; i++)
-            {
-                Measure measure = new Measure();
-                measure.date = new DateTime(2019+((((i/60)/24)/30)/12),(6+(((i/60)/24)/30))%12+1, (21+((i/60)/24))%30+1, (7+(i/60))%24, (0+i)%60, 0);
-                measure.value = 20;
-                valueList.Add(measure);
-            }*/
+            valueList = dao.RetreiveValues("average", device, size);
+        }
+
+        public void generateTable(int size, int frequence)
+        {
+            valueList = new ArrayList();
+            valueList = dao.RetreiveValues("average", device, size, frequence);
         }
     }
 

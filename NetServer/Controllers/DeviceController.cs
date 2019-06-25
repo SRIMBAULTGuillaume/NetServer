@@ -33,6 +33,18 @@ namespace NetServer.Controllers
             return response;
         }
 
+        public HttpResponseMessage Get(string device, int size, int frequence)
+        {
+            ResultAdapter resultAdapter = new ResultAdapter();
+            resultAdapter.device = device;
+            resultAdapter.generateTable(size, frequence);
+
+            var json = JsonConvert.SerializeObject(resultAdapter);
+            var response = this.Request.CreateResponse(HttpStatusCode.OK);
+            response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            return response;
+        }
+
         // POST api/<controller>
         public void Post([FromBody]string value)
         {

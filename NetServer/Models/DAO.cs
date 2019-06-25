@@ -17,12 +17,12 @@ namespace NetServer.Models
 
         
 
-        public ArrayList RetreiveValues(string device, int size)
+        public ArrayList RetreiveValues(string table, string device, int size)
         {
             ArrayList list = new ArrayList();
             MyCnx = new NpgsqlConnection(Conx);
             MyCnx.Open();
-            string select = "SELECT value, date FROM \"average\" WHERE Id_Device = " + device + "ORDER BY date LIMIT " + size;
+            string select = "SELECT value, date FROM " + table + " WHERE Id_Device = " + device + "ORDER BY date DESC LIMIT " + size;
             MyCmd = new NpgsqlCommand(select, MyCnx);
             var reader = MyCmd.ExecuteReader();
             if (reader.HasRows)
@@ -36,6 +36,37 @@ namespace NetServer.Models
                 }
             }
             
+            reader.Close();
+            MyCnx.Close();
+
+            return list;
+        }
+
+        public ArrayList RetreiveValues(string table, string device, int size, int frequence)
+        {
+            ArrayList list = new ArrayList();
+            int count = 0;
+            MyCnx = new NpgsqlConnection(Conx);
+            MyCnx.Open();
+            string select = "SELECT value, date FROM " + table + " WHERE Id_Device = " + device + "ORDER BY date DESC LIMIT " + size;
+            MyCmd = new NpgsqlCommand(select, MyCnx);
+            var reader = MyCmd.ExecuteReader();
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    count++;
+                    Measure measure = new Measure();
+                    measure.value = reader.GetInt32(0);
+                    measure.date = reader.GetDateTime(1);
+                    if (count == frequence)
+                    {
+                        list.Add(measure);
+                        count = 0;
+                    }
+                }
+            }
+
             reader.Close();
             MyCnx.Close();
 
