@@ -28,6 +28,6 @@ namespace NetServer.Models
     public class Measure
     {
         public DateTime date;
-        public int value;
+        public double value;
     }
 }
