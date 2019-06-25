@@ -3,7 +3,12 @@ solution: NetServer.sln
 mono:
   - latest
 
-install:
+before_install:
+  - ls
+  - ls Packages
+  - ls Packages/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0
+  - ls Packages/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0/build
+  - ls Packages/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0/build/net45/
   - cat Packages/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0/build/net45/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props
   
 notifications:
