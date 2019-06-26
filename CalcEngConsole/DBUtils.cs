@@ -26,17 +26,17 @@ namespace DBUtilisation
             MyCnx.Close();
         }
 
-        public void InsertMoyen(string macadress, Double value, NpgsqlTimeStamp date)
+        public void InsertMoyen(NpgsqlTimeStamp date, string macadress, Double value)
         {
             MyCnx = new NpgsqlConnection(BDDWindowsServer);
-            string insert = "INSERT INTO \"average\"(id_device,type,value,date,macadress) values(:id_device,:type,:value,:date,:macadress)";
+            string insert = "INSERT INTO \"average\"(date,macaddress,value) values(:date,:macaddress,:value)";
             MyCnx.Open();
             MyCmd = new NpgsqlCommand(insert, MyCnx);
-            MyCmd.Parameters.Add(new NpgsqlParameter("id_device", NpgsqlDbType.Integer)).Value = 1;
-            MyCmd.Parameters.Add(new NpgsqlParameter("type", NpgsqlDbType.Varchar)).Value = "";
-            MyCmd.Parameters.Add(new NpgsqlParameter("value", NpgsqlDbType.Double)).Value = value;
+
             MyCmd.Parameters.Add(new NpgsqlParameter("date", NpgsqlDbType.Timestamp)).Value = date;
-            MyCmd.Parameters.Add(new NpgsqlParameter("macadress", NpgsqlDbType.Varchar)).Value = macadress;
+            MyCmd.Parameters.Add(new NpgsqlParameter("macaddress", NpgsqlDbType.Varchar)).Value = macadress;
+            MyCmd.Parameters.Add(new NpgsqlParameter("value", NpgsqlDbType.Double)).Value = value;
+            
             MyCmd.ExecuteNonQuery(); //Exécution
             MyCnx.Close();
         }
@@ -46,13 +46,20 @@ namespace DBUtilisation
             var MyMetrics = new List<Metric>();
             MyCnx = new NpgsqlConnection(BDDJEE);
             MyCnx.Open();
-            // string select = "SELECT * FROM \"metrics\""; //TODO juste les donnée depuis 15 min
-            DateTime randge =   ;
-            DateTime date = DateTime.Now - DateTimeOffset(1);
-            string select = "SELECT * FROM \"metrics\" + WHERE date = @date ";
 
-            //https://docs.microsoft.com/en-us/dotnet/framework/data/adonet/ado-net-code-examples#sqlclient
-            //https://docs.microsoft.com/fr-fr/dotnet/standard/datetime/choosing-between-datetime
+            //long date = (DateTime.UtcNow.Ticks - DateTime.Parse("01/01/1970 00:00:00").Ticks) / 10000000 - 900 ;  //15*60*1000 = 900000
+            // long unixDate = 1297380023295;
+            long unixDate = DateTime.UtcNow.Ticks - DateTime.Parse("31/12/1969 23:45:00").Ticks;
+            DateTime start = new DateTime(2019, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            DateTime elhg = new DateTime(unixDate);
+
+            NpgsqlTimeStamp date = DateTime.Now.AddMinutes(-15).ToLocalTime();
+            
+            //TODO Va chercher la date de now moin 15 min;
+
+            string select = "SELECT * FROM \"metrics\" WHERE (date > timestamp \'" + date + "\')";           
+
+           
 
 
             MyCmd = new NpgsqlCommand(select, MyCnx);
@@ -61,11 +68,8 @@ namespace DBUtilisation
             {
                while (reader.Read())   //créer la liste des metrics
                 {
-                    //Console.WriteLine("{0}\t{1}", reader.GetInt32(0), reader.GetString(1));
                     // s = String.Format("{0}\t{1}\t{2}\t{3}", reader.GetInt32(0), reader.GetInt32(1), reader.GetTimeStamp(2), reader.GetInt32(3));
-                    //s = String.Format("{0}\t{1}\t{2}", reader.GetInt32(1), reader.GetTimeStamp(2), reader.GetInt32(3));
-                    MyMetrics.Add(new Metric(reader.GetTimeStamp(2), reader.GetInt32(3), reader.GetString(4)));
-                    // Console.WriteLine(<Metric>);
+                    MyMetrics.Add(new Metric(reader.GetTimeStamp(1), reader.GetInt32(2), reader.GetString(3)));
                 }
                 
             }
