@@ -18,7 +18,7 @@ namespace DBUtilisation
         {
             MyCnx = new NpgsqlConnection(BDDJEE);
             //La valeur DEFAULT parce que la propriété id est auto incrémenté "INSERT INTO \"Test\"(id,name) values(DEFAULT,:name)"
-            string insert = "INSERT INTO \"devices\"(id,name) values(DEFAULT,:name)";   
+            string insert = "INSERT INTO \"devices\"(id,name) values(DEFAULT,:name)";
             MyCnx.Open();
             MyCmd = new NpgsqlCommand(insert, MyCnx);
             MyCmd.Parameters.Add(new NpgsqlParameter("@name", NpgsqlDbType.Varchar)).Value = @name;
@@ -36,42 +36,32 @@ namespace DBUtilisation
             MyCmd.Parameters.Add(new NpgsqlParameter("date", NpgsqlDbType.Timestamp)).Value = date;
             MyCmd.Parameters.Add(new NpgsqlParameter("macaddress", NpgsqlDbType.Varchar)).Value = macadress;
             MyCmd.Parameters.Add(new NpgsqlParameter("value", NpgsqlDbType.Double)).Value = value;
-            
+
             MyCmd.ExecuteNonQuery(); //Exécution
             MyCnx.Close();
         }
 
-        public List<Metric> SelectAllMetrics()
+        public List<Metric> SelectAllMetricsQuarter()
         {
             var MyMetrics = new List<Metric>();
             MyCnx = new NpgsqlConnection(BDDJEE);
             MyCnx.Open();
-
             //long date = (DateTime.UtcNow.Ticks - DateTime.Parse("01/01/1970 00:00:00").Ticks) / 10000000 - 900 ;  //15*60*1000 = 900000
             // long unixDate = 1297380023295;
-            long unixDate = DateTime.UtcNow.Ticks - DateTime.Parse("31/12/1969 23:45:00").Ticks;
-            DateTime start = new DateTime(2019, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            DateTime elhg = new DateTime(unixDate);
-
+            //long unixDate = DateTime.UtcNow.Ticks - DateTime.Parse("31/12/1969 23:45:00").Ticks;
+            //DateTime start = new DateTime(2019, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            //DateTime elhg = new DateTime(unixDate);
             NpgsqlTimeStamp date = DateTime.Now.AddMinutes(-15).ToLocalTime();
-            
-            //TODO Va chercher la date de now moin 15 min;
-
-            string select = "SELECT * FROM \"metrics\" WHERE (date > timestamp \'" + date + "\')";           
-
-           
-
-
+            string select = "SELECT * FROM \"metrics\" WHERE (date > timestamp \'" + date + "\')";
             MyCmd = new NpgsqlCommand(select, MyCnx);
             var reader = MyCmd.ExecuteReader();
             if (reader.HasRows)
             {
-               while (reader.Read())   //créer la liste des metrics
+                while (reader.Read())   //créer la liste des metrics
                 {
                     // s = String.Format("{0}\t{1}\t{2}\t{3}", reader.GetInt32(0), reader.GetInt32(1), reader.GetTimeStamp(2), reader.GetInt32(3));
                     MyMetrics.Add(new Metric(reader.GetTimeStamp(1), reader.GetInt32(2), reader.GetString(3)));
                 }
-                
             }
             else
             {
@@ -82,6 +72,35 @@ namespace DBUtilisation
             MyCnx.Close();
             return MyMetrics;
         }
-     }
-}//Fin
+
+
+        public List<listmac> Checkmacaddress()
+        {
+            
+            var list = new List<listmac>();
+            MyCnx = new NpgsqlConnection(BDDJEE);
+            MyCnx.Open();
+            string select = "SELECT \"macAddress\" FROM \"devices\"";  // SELECT "macAddress" FROM devices;
+            MyCmd = new NpgsqlCommand(select, MyCnx);
+            var reader = MyCmd.ExecuteReader();
+            if (reader.HasRows)
+            {
+                while (reader.Read())   //créer la liste des metrics
+                {
+                    // s = String.Format("{0}\t{1}\t{2}\t{3}", reader.GetInt32(0), reader.GetInt32(1), reader.GetTimeStamp(2), reader.GetInt32(3));
+                    list.Add(new listmac(reader.GetString(0)));
+                }
+            }
+            else
+            {
+                Console.WriteLine("No rows found.");
+                list = null;
+            }
+            reader.Close();
+            return list;
+        }
+
+
+    }//Fin
+}
 

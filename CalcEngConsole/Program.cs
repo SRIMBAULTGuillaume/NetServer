@@ -10,7 +10,7 @@ namespace CalcEngConsole
 {
     class Program
     {
-
+        //check macadress quand tu recupere les metrics si inconnu ajoute dans la table device
         static void Main(string[] args)
         {
             Console.WriteLine("Je démarre");
@@ -28,9 +28,40 @@ namespace CalcEngConsole
         public static void SaveAllMetrics()
         {
             DAO Bdd = new DAO();
-            var MyMetrics = Bdd.SelectAllMetrics();
+            var MyMetrics = Bdd.SelectAllMetricsQuarter();
+            Bdd.Checkmacaddress();
+            //Verifmacaddress(MyMetrics);
             CalculInsertValues(MyMetrics);
         }
+
+        public static void Verifmacaddress(List<Metric> listmac)
+        {
+            foreach (var obj in listmac)
+            {
+                //Console.WriteLine(obj.Key);
+                // Pour chaque object dans la liste my metrics
+                        // regarde sa mac adress, 
+                        //chercher cette macadress dans la bdd device
+                    //si tu latrouve alors aclculet insert metric
+                    // si non ajoute la ligne trouver dans mylist  avec l'adress inconnu dans la base devices
+                    //2 requete compare liste metric et liste devices
+                var newList = listmac.Where(x => x.macaddress == obj.macaddress).ToList();
+                try
+                {
+                    //compare la value de new list avec les macadress de la base
+                    
+
+                   
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Erreur list null" + e);
+                }
+            }
+        }
+
+
+      
 
         public static void CalculInsertValues(List<Metric> MyMetrics)
         {
