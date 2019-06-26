@@ -24,7 +24,7 @@ namespace NetServer.Models
             {
                 MyCnx = new NpgsqlConnection(Conx);
                 MyCnx.Open();
-                string select = "SELECT value, date FROM \"" + table + "\"WHERE macadress = " + device + "ORDER BY date DESC LIMIT " + size;
+                string select = "SELECT value, date FROM \"" + table + "\"WHERE id_device = " + device + "ORDER BY date DESC LIMIT " + size;
                 MyCmd = new NpgsqlCommand(select, MyCnx);
                 var reader = MyCmd.ExecuteReader();
                 if (reader.HasRows)
@@ -59,7 +59,7 @@ namespace NetServer.Models
                 double sum = 0;
                 MyCnx = new NpgsqlConnection(Conx);
                 MyCnx.Open();
-                string select = "SELECT value, date FROM " + table + " WHERE macadress = " + device + "ORDER BY date DESC LIMIT " + size;
+                string select = "SELECT value, date FROM " + table + " WHERE id_device = " + device + "ORDER BY date DESC LIMIT " + size;
                 MyCmd = new NpgsqlCommand(select, MyCnx);
                 var reader = MyCmd.ExecuteReader();
                 if (reader.HasRows)
@@ -67,7 +67,7 @@ namespace NetServer.Models
                     while (reader.Read())
                     {
                         count++;
-                        sum = reader.GetDouble(0);
+                        sum = sum + reader.GetDouble(0);
                         if (count == frequence)
                         {
 
@@ -76,6 +76,7 @@ namespace NetServer.Models
                             measure.date = reader.GetDateTime(1);
                             list.Add(measure);
                             count = 0;
+                            sum = 0;
                         }
                     }
                 }
