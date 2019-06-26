@@ -24,7 +24,7 @@ namespace NetServer
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
 
-                routeTemplate: "api/{controller}/{metric}/{device}/{size}/{frequence}",
+                routeTemplate: "api/{controller}/{metric}/{size}/{frequence}",
                 defaults: new { metric = RouteParameter.Optional, device = RouteParameter.Optional, size = RouteParameter.Optional, frequence = RouteParameter.Optional}
 
             );
