@@ -26,16 +26,16 @@ namespace DBUtilisation
             MyCnx.Close();
         }
 
-        public void InsertMacAddress(string type, int userID, string macAddress)
+        public void InsertMacAddress(string type, string macAddress)
         {
             MyCnx = new NpgsqlConnection(BDDJEE);
             
-            string insert = "INSERT INTO \"devices\"(type,userID,macAddress) values(:type,:userID,:macAddress)";
+            string insert = "INSERT INTO devices (\"type\",\"macAddress\") values(:type,:macAddress)";
             MyCnx.Open();
             MyCmd = new NpgsqlCommand(insert, MyCnx);
-            MyCmd.Parameters.Add(new NpgsqlParameter("type", NpgsqlDbType.Char)).Value = @type;
-            MyCmd.Parameters.Add(new NpgsqlParameter("user", NpgsqlDbType.Integer)).Value = @userID;
-            MyCmd.Parameters.Add(new NpgsqlParameter("macadress", NpgsqlDbType.Text)).Value = @macAddress;
+            MyCmd.Parameters.Add(new NpgsqlParameter("type", NpgsqlDbType.Text)).Value = @type;
+            //MyCmd.Parameters.Add(new NpgsqlParameter("userID", NpgsqlDbType.Integer)).Value = @userID;
+            MyCmd.Parameters.Add(new NpgsqlParameter("macAddress", NpgsqlDbType.Text)).Value = @macAddress;
             MyCmd.ExecuteNonQuery(); 
             MyCnx.Close();
         }
@@ -85,7 +85,8 @@ namespace DBUtilisation
             var list = new List<listmac>();
             MyCnx = new NpgsqlConnection(BDDJEE);
             MyCnx.Open();
-            string select = "SELECT \"macAddress\" FROM \"devices\"";  // SELECT "macAddress" FROM devices;
+            NpgsqlTimeStamp date = DateTime.Now.AddMinutes(-15).ToLocalTime();
+            string select = "SELECT \"macAddress\" FROM \"metrics\" WHERE (date > timestamp \'" + date + "\')";  // SELECT "macAddress" FROM devices;
             MyCmd = new NpgsqlCommand(select, MyCnx);
             var reader = MyCmd.ExecuteReader();
             if (reader.HasRows)
@@ -105,7 +106,35 @@ namespace DBUtilisation
             return list;
         }
 
+         public List<string> Checkmacdevice()
+        {
+            var list = new List<string>();
+            MyCnx = new NpgsqlConnection(BDDJEE);
+            MyCnx.Open();
+            NpgsqlTimeStamp date = DateTime.Now.AddMinutes(-15).ToLocalTime();
+            string select = "SELECT \"macAddress\" FROM \"devices\"";  // SELECT "macAddress" FROM devices;
+            MyCmd = new NpgsqlCommand(select, MyCnx);
+            var reader = MyCmd.ExecuteReader();
+            if (reader.HasRows)
+            {
+                while (reader.Read())   //créer la liste des metrics
+                {
+                    // s = String.Format("{0}\t{1}\t{2}\t{3}", reader.GetInt32(0), reader.GetInt32(1), reader.GetTimeStamp(2), reader.GetInt32(3));
+                    list.Add(reader.GetString(0));
+                }
+            }
+            else
+            {
+                Console.WriteLine("No rows found.");
+                list = null;
+            }
+            reader.Close();
+            return list;
+        }
+
+
 
     }//Fin
 }
 
+//Delete from devices where id > 22
