@@ -20,9 +20,13 @@ namespace Bipper
                     {
                         var body = ea.Body;
                         var message = Encoding.UTF8.GetString(body);
-                        Console.WriteLine(" [x] Received {0}", message);
+                        if (ea.RoutingKey == "AA:AA:AA:AA:AA:AA")
+                        {
+                            Console.WriteLine(" [x] Received {0}", message);
+                            channel.BasicAck(ea.DeliveryTag,false);
+                        }
                     };
-                    channel.BasicConsume(queue: "sendData", autoAck: true,consumer: consumer);
+                    channel.BasicConsume(queue: "sendData", autoAck: false, consumer: consumer);
                     Console.ReadLine();
                 }
             }
