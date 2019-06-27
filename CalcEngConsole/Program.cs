@@ -1,12 +1,7 @@
 ﻿using System;
+using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tutorial.SqlConn;
-using System.Data.SqlClient;
-using System.Data.Common;
-using System.Collections;
 using DBUtilisation;
 
 namespace CalcEngConsole
@@ -15,80 +10,96 @@ namespace CalcEngConsole
     {
         static void Main(string[] args)
         {
-            DAO per = new DAO();    //Instaciation
-                                    //TODO faire la boucle au propre
-                                    //TODO se declanche tous les 15 min et lance la compilation des données
-            //OK SreenDevices();
-            //OK per.InsertPersons("guigui42");    
-            //OKper.SelectAllDevices();
-            Console.WriteLine("j'ai fini");
-            Console.ReadLine();
-
+            Console.WriteLine("Je démarre");
+            Console.WriteLine("Je lance une save de la moyenne");
+            
+            while (true)
+            {
+                SaveAllMetrics();
+                Console.WriteLine("J'ai fini d'insérer mes calcul");
+                Thread.Sleep(15*60*1000);
+               // Thread.Sleep(30000);
+            }           
         }
 
-        public static void SreenDevices()
+        public static void SaveAllMetrics()
         {
-            //TODO passer une liste rempli de devices
-            var MyDevices = new List<Metric>();
-            MyDevices.Add(new Metric(42, DateTime.Now, 20));
-            MyDevices.Add(new Metric(42, DateTime.Now, 18));
-            MyDevices.Add(new Metric(47, DateTime.Now, 18));
+            DAO Bdd = new DAO();
+            var MyMetrics = Bdd.SelectAllMetricsQuarter();            
+            Verifmacaddress(Bdd.Checkmacaddress());
+            CalculInsertValues(MyMetrics);
+        }
 
-            var rand = new Random();
-            for (int i = 0; i<100; i++)
+        public static void Verifmacaddress(List<listmac> listmac)
+        {
+            DAO Bdd = new DAO();
+            var newList = Bdd.Checkmacdevice();
+            if (listmac == null)
             {
-                var a = rand.Next(50);
-                MyDevices.Add(new Metric(48, DateTime.Now, a));
+                Console.WriteLine("pas de metric enregistrer depuis moin de 15 min");
+                return;              
             }
 
-            Console.WriteLine("My devices");
-            //Console.WriteLine("    Numbers of Devices:    {0}", MyDevices.Count);
-            //Console.WriteLine("    Total Devices: {0}", MyDevices.Capacity);
-            
-            PrintValues(MyDevices);
+            foreach (var obj in listmac)              
+            {
+                if (newList.Contains(obj.macaddress))
+                {
+                    continue;
+                }
+                else
+                {
+                    String type = "UNKNOW";
+                    string macaddress = obj.macaddress;
+                    Console.WriteLine("I don't know, who is this Macaddress ?");
+                    Bdd.InsertMacAddress(type, macaddress);
+                    Console.WriteLine("Call your administrator, I insert this Macaddress in my BDD ");
+                }
+            }
         }
 
-        public static void PrintValues(List<Metric> myList)
+        public static void CalculInsertValues(List<Metric> MyMetrics)
         {
-            foreach (var obj in myList.GroupBy(x => x.id).ToList())
+            if (MyMetrics == null)
             {
-                //Console.WriteLine(obj.Key);
-                //Je selectionne parmis myList les elements dont l'id egale à 1
-                var newList = myList.Where(x => x.id == obj.Key).ToList();
+                Console.WriteLine("pas de metric enregistrer depuis moin de 15 min");
+                return;               
+            }
+
+            DAO Bdd = new DAO();
+            foreach (var obj in MyMetrics.GroupBy(x => x.macaddress).ToList())
+            { 
+                var newList = MyMetrics.Where(x => x.macaddress == obj.Key).ToList();
                 try
                 {
-                    MetricMoy moyenne = CalcMoyenne(newList);
-                    Console.WriteLine(moyenne.value);
+                    Metric moyenne = CalcMoyenne(newList);
+                    Bdd.InsertMoyen(moyenne.date, moyenne.macaddress, moyenne.value );
+                    Console.WriteLine("Value " + moyenne.value);                   
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("Erreur list null");
+                    Console.WriteLine("Erreur list null" + e);
                 }
             }
         }
 
-        static MetricMoy CalcMoyenne(List<Metric> list)
-        {
-            if (list.Count() == 0)
-               throw new Exception();
-            
-            var somme = 0f;
-            var date = list[0].date;
-            foreach (Metric obj in list)
+        static Metric CalcMoyenne(List<Metric> MyMetrics)
+        {      
+            if (MyMetrics.Count() == 0)
+                throw new Exception();
+            Double somme = 0;
+            var date = MyMetrics[0].date;
+            foreach (Metric obj in MyMetrics)
             {
                 somme = obj.value + somme;
                 if (date > obj.date)
                 {
                     date = obj.date;
-                }
-
+                }    
             }
-            somme = somme/list.Count();
-            return new MetricMoy(list[0].id, date, somme);
+            somme = somme / MyMetrics.Count();
+            return new Metric(date, somme, MyMetrics[0].macaddress);
         }
     }
-    // ID device/ date d'insertion / valeur
-    //https://o7planning.org/fr/10515/utilisation-d-une-base-de-donnees-sql-server-en-utilisant-csharp
 }
 
 
