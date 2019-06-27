@@ -56,8 +56,13 @@ namespace CalcEngConsole
                     }
                     else
                     {
-                    //add la macaddress inconnu dans la bdd devices
+                    //add la macaddress inconnu de newList dans la bdd devices
+                    DAO Bdd = new DAO();
+                    String type = "Unknow";
+                    int userid = 0;
                     Console.WriteLine("I don't know, who is this Macaddress ?");
+                    Bdd.InsertMacAddress(type, userid, newList[0].macaddress);
+                    Console.WriteLine("Call your administrator, I insert this Macaddress in my BDD ");
                 }
 
                 try
@@ -76,6 +81,12 @@ namespace CalcEngConsole
 
         public static void CalculInsertValues(List<Metric> MyMetrics)
         {
+            if (MyMetrics == null)
+            {
+                return;
+                Console.WriteLine("pas de metric enregistrer depuis moin de 15 min");
+            }
+
             DAO Bdd = new DAO();
             foreach (var obj in MyMetrics.GroupBy(x => x.macaddress).ToList())
             {

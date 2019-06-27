@@ -26,18 +26,30 @@ namespace DBUtilisation
             MyCnx.Close();
         }
 
+        public void InsertMacAddress(string type, int userID, string macAddress)
+        {
+            MyCnx = new NpgsqlConnection(BDDJEE);
+            
+            string insert = "INSERT INTO \"devices\"(type,userID,macAddress) values(:type,:userID,:macAddress)";
+            MyCnx.Open();
+            MyCmd = new NpgsqlCommand(insert, MyCnx);
+            MyCmd.Parameters.Add(new NpgsqlParameter("type", NpgsqlDbType.Char)).Value = @type;
+            MyCmd.Parameters.Add(new NpgsqlParameter("user", NpgsqlDbType.Integer)).Value = @userID;
+            MyCmd.Parameters.Add(new NpgsqlParameter("macadress", NpgsqlDbType.Text)).Value = @macAddress;
+            MyCmd.ExecuteNonQuery(); 
+            MyCnx.Close();
+        }
+
         public void InsertMoyen(NpgsqlTimeStamp date, string macadress, Double value)
         {
             MyCnx = new NpgsqlConnection(BDDWindowsServer);
             string insert = "INSERT INTO \"average\"(date,macaddress,value) values(:date,:macaddress,:value)";
             MyCnx.Open();
             MyCmd = new NpgsqlCommand(insert, MyCnx);
-
             MyCmd.Parameters.Add(new NpgsqlParameter("date", NpgsqlDbType.Timestamp)).Value = date;
             MyCmd.Parameters.Add(new NpgsqlParameter("macaddress", NpgsqlDbType.Varchar)).Value = macadress;
             MyCmd.Parameters.Add(new NpgsqlParameter("value", NpgsqlDbType.Double)).Value = value;
-
-            MyCmd.ExecuteNonQuery(); //Exécution
+            MyCmd.ExecuteNonQuery(); 
             MyCnx.Close();
         }
 
@@ -46,11 +58,6 @@ namespace DBUtilisation
             var MyMetrics = new List<Metric>();
             MyCnx = new NpgsqlConnection(BDDJEE);
             MyCnx.Open();
-            //long date = (DateTime.UtcNow.Ticks - DateTime.Parse("01/01/1970 00:00:00").Ticks) / 10000000 - 900 ;  //15*60*1000 = 900000
-            // long unixDate = 1297380023295;
-            //long unixDate = DateTime.UtcNow.Ticks - DateTime.Parse("31/12/1969 23:45:00").Ticks;
-            //DateTime start = new DateTime(2019, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            //DateTime elhg = new DateTime(unixDate);
             NpgsqlTimeStamp date = DateTime.Now.AddMinutes(-15).ToLocalTime();
             string select = "SELECT * FROM \"metrics\" WHERE (date > timestamp \'" + date + "\')";
             MyCmd = new NpgsqlCommand(select, MyCnx);
@@ -73,10 +80,8 @@ namespace DBUtilisation
             return MyMetrics;
         }
 
-
         public List<listmac> Checkmacaddress()
         {
-            
             var list = new List<listmac>();
             MyCnx = new NpgsqlConnection(BDDJEE);
             MyCnx.Open();
