@@ -20,7 +20,8 @@ namespace CalcEngConsole
             {
                 SaveAllMetrics();
                 Console.WriteLine("J'ai fini d'insérer mes calcul");
-                Thread.Sleep(15*60*1000);  
+                Thread.Sleep(15*60*1000);
+                
             }
             
         }
@@ -29,29 +30,39 @@ namespace CalcEngConsole
         {
             DAO Bdd = new DAO();
             var MyMetrics = Bdd.SelectAllMetricsQuarter();
-            Bdd.Checkmacaddress();
-            //Verifmacaddress(MyMetrics);
+            
+            Verifmacaddress(Bdd.Checkmacaddress());
             CalculInsertValues(MyMetrics);
         }
 
-        public static void Verifmacaddress(List<Metric> listmac)
+        public static void Verifmacaddress(List<listmac> listmac)
         {
+            int i = 0;
             foreach (var obj in listmac)
             {
                 //Console.WriteLine(obj.Key);
-                // Pour chaque object dans la liste my metrics
-                        // regarde sa mac adress, 
-                        //chercher cette macadress dans la bdd device
-                    //si tu latrouve alors aclculet insert metric
-                    // si non ajoute la ligne trouver dans mylist  avec l'adress inconnu dans la base devices
-                    //2 requete compare liste metric et liste devices
+                // Pour chaque object dans la liste my listmac
+                // regarde sa mac adress, 
+                //chercher cette macadress dans la bdd device
+                //si tu la trouve alors rien
+                // si non ajoute la ligne trouver dans mylist  avec l'adress inconnu dans la base devices
+                //2 requete compare liste metric et liste devices
                 var newList = listmac.Where(x => x.macaddress == obj.macaddress).ToList();
+                
+                    if (newList[0] == listmac[i])
+                    {
+                    Console.WriteLine("I know");
+                    i++;
+                    }
+                    else
+                    {
+                    //add la macaddress inconnu dans la bdd devices
+                    Console.WriteLine("I don't know, who is this Macaddress ?");
+                }
+
                 try
                 {
-                    //compare la value de new list avec les macadress de la base
-                    
-
-                   
+                    Console.WriteLine("Pas d'erreur");
                 }
                 catch (Exception e)
                 {
