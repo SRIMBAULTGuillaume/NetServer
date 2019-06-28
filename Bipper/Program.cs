@@ -8,34 +8,48 @@ namespace Bipper
 {
     class Program
     {
-        public string GenerateMessage()
+        static string[] macList = { "AA:AA:AA:AA:AA:AA", "BB:BB:BB:BB:BB:BB", "CC:CC:CC:CC:CC:CC", "CC:2F:71:93:39:F1" };
+        static Int32 unixTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+        static Random random = new Random();
+
+        static public string GenerateMessage()
         {
-            string[] macList = { "AA:AA:AA:AA:AA:AA", "BB:BB:BB:BB:BB:BB", "CC:CC:CC:CC:CC:CC", "CC:2F:71:93:39:F1"};
-            DateTime date = DateTime.Now;
-            Random random = new Random();
             int value = random.Next(10,50);
-            string mac = macList[random.Next(3)];
-            string message = "{\"value\": "+ value +", \"macAddress\": "+ mac +", \"date\": "+ date +"}";
-            return message;
+            string mac = macList[random.Next(4)];
+            return "{\"value\": "+ value +", \"macAddress\": \""+ mac +"\", \"date\": "+ unixTimestamp +"}";
         }
 
         static void LoopMaker()
         {
-            while(true)
+            var factory = new ConnectionFactory() { HostName = "10.151.129.35" };
+            using (var connection = factory.CreateConnection())
+            using (var channel = connection.CreateModel())
             {
-                for(int i=0; i<500; i++)
+                channel.QueueDeclare(queue: "receiveData", durable: false, exclusive: false, autoDelete: false, arguments: null);
+                while (true)
                 {
-                    string message = Gene
+                    for (int i = 0; i < 1; i++)
+                    {
+                        string message = GenerateMessage();
+                        var body = Encoding.UTF8.GetBytes(message);
+
+                        channel.BasicPublish(exchange: "receiveData-exchange", routingKey: "devices", basicProperties: null, body: body);
+                        Console.WriteLine(" [x] Sent {0}", message);
+                    }
+                    //Console.WriteLine("500 message sent");
+                    Thread.Sleep(1000);
                 }
-                Thread.Sleep(1000);
-            }
+            }     
         }
 
 
 
         static void Main()
         {
-            string message = GenerateMessage();
+            ThreadStart loopStarter = new ThreadStart(LoopMaker);
+            Thread looper = new Thread(loopStarter);
+            looper.Start();
+
             var factory = new ConnectionFactory() { HostName = "10.151.129.35" };
             using (var connection = factory.CreateConnection())
             {
@@ -55,6 +69,7 @@ namespace Bipper
                     };
                     channel.BasicConsume(queue: "sendData", autoAck: false, consumer: consumer);
                     Console.ReadLine();
+                    looper.Abort();
                 }
             }
         }
