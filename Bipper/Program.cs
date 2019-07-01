@@ -1,21 +1,33 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Text;
 using System.Threading;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
+
+
 namespace Bipper
 {
     class Program
     {
-        static string[] macList = { "AA:AA:AA:AA:AA:AA", "BB:BB:BB:BB:BB:BB", "CC:CC:CC:CC:CC:CC", "CC:2F:71:93:39:F1" };
-        static Int32 unixTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+        static string[] macList = { "c0:e4:bf:30:3a:c3", "d4:36:2f:bb:16:48", "8c:26:2c:0b:bc:f5", "48:22:ae:c8:0a:bf", "3c:ae:8d:9e:69:2e", "c0:63:5d:c8:e8:34", "4c:a6:6f:0a:1b:ef", "02:0f:83:d2:b2:a5" };
+        static bool led = false;
+
+        
+
         static Random random = new Random();
 
-        static public string GenerateMessage()
+        static public string GenerateMessage(int device)
         {
-            int value = random.Next(10,50);
-            string mac = macList[random.Next(4)];
+            Int32 unixTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            int value;
+            if (device == 5)
+                value = led ? 50 : 0;
+            else
+                value = random.Next(10, 50);
+
+            string mac = macList[device];
             return "{\"value\": "+ value +", \"macAddress\": \""+ mac +"\", \"date\": "+ unixTimestamp +"}";
         }
 
@@ -28,15 +40,15 @@ namespace Bipper
                 channel.QueueDeclare(queue: "receiveData", durable: false, exclusive: false, autoDelete: false, arguments: null);
                 while (true)
                 {
-                    for (int i = 0; i < 1; i++)
+                    for (int i = 0; i < 8; i++)
                     {
-                        string message = GenerateMessage();
+                        string message = GenerateMessage(i);
                         var body = Encoding.UTF8.GetBytes(message);
 
                         channel.BasicPublish(exchange: "receiveData-exchange", routingKey: "devices", basicProperties: null, body: body);
                         Console.WriteLine(" [x] Sent {0}", message);
                     }
-                    //Console.WriteLine("500 message sent");
+                    Console.WriteLine("-----------------------------------------------------------------------------------------");
                     Thread.Sleep(1000);
                 }
             }     
@@ -61,17 +73,16 @@ namespace Bipper
                     {
                         var body = ea.Body;
                         var message = Encoding.UTF8.GetString(body);
-                        if (ea.RoutingKey == "AA:AA:AA:AA:AA:AA")
-                        {
-                            Console.WriteLine(" [x] Received {0}", message);
-                            channel.BasicAck(ea.DeliveryTag,false);
-                        }
+                        if (ea.RoutingKey == "c0:63:5d:c8:e8:34")
+                            led = !led;
+                        Console.WriteLine(" [x] Received {0}, Device Mac : {1}", message, ea.RoutingKey);
+                        channel.BasicAck(ea.DeliveryTag,false);
                     };
                     channel.BasicConsume(queue: "sendData", autoAck: false, consumer: consumer);
                     Console.ReadLine();
-                    looper.Abort();
                 }
             }
+            looper.Abort();
         }
     }
 }
