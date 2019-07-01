@@ -83,6 +83,30 @@ namespace DBUtilisation
             return MyMetrics;
         }
 
+        public List<Metric> SelectAllMetricsSinceYear(DateTime date1, DateTime date2)
+        {
+            var MyMetrics = new List<Metric>();
+                string select = "SELECT * FROM \"metrics\" WHERE date BETWEEN timestamp \'" + (NpgsqlTimeStamp)date1 + "\' and timestamp \'" + (NpgsqlTimeStamp)date2 + "\'";
+                MyCmd = new NpgsqlCommand(select, MyCnxJEE);
+                var reader = MyCmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        MyMetrics.Add(new Metric(reader.GetTimeStamp(1), reader.GetInt32(2), reader.GetString(3)));
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("No rows found.");
+                    MyMetrics = null;
+                }
+                reader.Close();
+                Console.WriteLine(date2);
+            return MyMetrics;
+        }
+
+
         public List<listmac> Checkmacaddress()
         {
             var list = new List<listmac>();

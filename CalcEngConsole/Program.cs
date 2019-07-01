@@ -13,10 +13,11 @@ namespace CalcEngConsole
         {
             Console.WriteLine("Je démarre");
             Console.WriteLine("Je lance une save de la moyenne");
-            
+            //SelectAllMetricsbySinceYear();
             while (true)
             {
                 SaveAllMetricsbyQuarter();
+                //SelectAllMetricsbySinceYear();
                 Console.WriteLine("J'ai fini d'insérer mes calculs");
                 Thread.Sleep(15*60*1000);
                // Thread.Sleep(30000);
@@ -31,34 +32,24 @@ namespace CalcEngConsole
             CalculInsertValues(MyMetrics);
         }
 
-        //public static void Verifmacaddress(List<listmac> listmac)
-        //{
-          
-        //    var newList = Bdd.Checkmacdevice();
-        //    if (listmac == null)
-        //    {
-        //        Console.WriteLine("pas de metric enregistrer depuis moin de 15 min");
-        //        return;              
-        //    }
+        public static void SelectAllMetricsbySinceYear()
+        {
+            DateTime date1 = DateTime.Now.AddMonths(-1).ToLocalTime(); ;
+            DateTime date2 = date1.AddMinutes(15).ToLocalTime();
 
-        //    foreach (var obj in listmac)              
-        //    {
-        //        if (newList.Contains(obj.macaddress))
-        //        {
-        //            continue;
-        //        }
-        //        else
-        //        {
-        //            String type = "UNKNOW";
-        //            string macaddress = obj.macaddress;
-        //            Console.WriteLine("I don't know, who is this Macaddress ?");
-        //            Bdd.InsertMacAddress(type, macaddress);
-        //            Console.WriteLine("Call your administrator, I insert this Macaddress in my BDD ");
-        //        }
-        //    }
-        //}
+            while (date2 < DateTime.Now)
+            {
+                var MyMetrics = Bdd.SelectAllMetricsSinceYear(date1, date2);
 
-        public static void CalculInsertValues(List<Metric> MyMetrics)
+                CalculInsertValues(MyMetrics);
+                date1 = date2;
+                date2 = date2.AddMinutes(15).ToLocalTime();
+            }
+            
+        }
+
+
+            public static void CalculInsertValues(List<Metric> MyMetrics)
         {
             if (MyMetrics == null)
             {
